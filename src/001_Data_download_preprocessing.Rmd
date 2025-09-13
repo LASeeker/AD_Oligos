@@ -1,0 +1,36 @@
+---
+title: "001_Data_download_preprocessing"
+author: "Luise A. Seeker"
+date: "2025-09-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Install from GitHub
+devtools::install_github("LASeeker/RNAseqEr")
+
+
+```
+
+load libraries
+```{r}
+library(Seurat)
+library(dplyr)
+library(cellxgene.census)
+
+
+```
+
+
+
+
+```{r}
+collection_id <- "1ca90a2d-2943-483d-b678-b809bf464c30"
+ol_mtg_dat_id <- "e6c31d25-fdb2-434a-b329-aa0476fc701d"
+              
+
+```
