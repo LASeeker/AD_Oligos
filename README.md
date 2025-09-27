@@ -128,16 +128,6 @@ Detailed methods are available in [`Methods_Oligos_SEA-AD_Oligos.md`](Methods_Ol
 - Visualization methods
 - Computational specifications
 
-## 🤝 Contributing
-
-We welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -154,16 +144,8 @@ For questions or collaborations, please open an issue or contact the maintainers
 
 ## 📚 References
 
-If you use this analysis in your research, please cite:
-
-```bibtex
-@software{ad_oligos_analysis,
-  title={AD_Oligos: Single-cell Analysis of Oligodendrocytes in Alzheimer's Disease},
-  author={[Your Name]},
-  year={2024},
-  url={https://github.com/yourusername/AD_Oligos}
-}
-```
+Citation data to follow.
+ 
 
 ---
 

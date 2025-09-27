@@ -1,3 +1,4 @@
+
 #R_Project
 .AD_Oligos.Rproj
 
@@ -52,5 +53,9 @@ po/*~
 rsconnect/
 
 # .env file containing file paths etc.
-
 .env
+
+
+#Large output data
+output/MTG/processed_MTG_SEA-AD_oligos.h5ad
+output/DLPFC/processed_DLPFC_SEA-AD_oligos.h5ad
