@@ -21,11 +21,15 @@ AD_Oligos/
 │   ├── DLPFC/                             # DLPFC-specific outputs
 │   │   ├── processed_DLPFC_SEA-AD_oligos.h5ad (not pushed to github)
 │   │   ├── DLPFC_cluster_braak_composition_*.csv
-│   │   └── DLPFC_deg_results_*.csv
+│   │   ├── DLPFC_deg_results_*.csv       # Single-cell DEG results
+│   │   ├── DLPFC_pseudobulk_deg_results_*.csv  # Pseudo-bulk DEG results
+│   │   └── DLPFC_pseudobulk_sample_metadata.csv
 │   └── MTG/                               # MTG-specific outputs
 │       ├── processed_MTG_SEA-AD_oligos.h5ad (not pushed to github)
 │       ├── MTG_cluster_braak_composition_*.csv
-│       └── MTG_deg_results_*.csv
+│       ├── MTG_deg_results_*.csv         # Single-cell DEG results
+│       ├── MTG_pseudobulk_deg_results_*.csv    # Pseudo-bulk DEG results
+│       └── MTG_pseudobulk_sample_metadata.csv
 ├── Methods_Oligos_SEA-AD_Oligos.md        # Detailed methods section
 ├── environment.yml                         # Conda environment specification
 ├── .env                                    # Environment variables (data paths)
@@ -85,20 +89,47 @@ AD_Oligos/
 - **Visualization**: UMAP plots colored by Braak stage
 
 ### Differential Expression Analysis
-- **Method**: Wilcoxon rank-sum test
-- **Comparisons**: 
-  - Reference vs Braak III
-  - Braak III vs Braak VI
-- **Output**: Gene symbols with statistical significance and fold changes
+
+**Single-cell DEG:**
+- **Method**: Wilcoxon rank-sum test on log-normalized data
+- **Level**: Cell-level analysis capturing heterogeneity
+- **Output**: Gene-level statistics with adjusted p-values
+
+**Pseudo-bulk DEG:**
+- **Method**: Aggregation by donor followed by Mann-Whitney U test
+- **Normalization**: Counts per million (CPM)
+- **Advantage**: Increased statistical power by treating donors as biological replicates
+- **Output**: Gene-level statistics with robust fold change estimates
+
+**Comparisons for both methods:**
+- Reference vs Braak III
+- Braak III vs Braak VI
 
 ## 📈 Key Results
 
 The analysis generates comprehensive outputs including:
 
-- **Cluster Composition Analysis**: Statistical comparison of cell populations across Braak stages
-- **Differential Gene Expression**: Identification of genes with altered expression in AD progression
-- **Volcano Plots**: Visualization of significant gene expression changes
+- **Cluster Composition Analysis**: Statistical comparison of cell populations across Braak stages with chi-square testing
+- **Single-cell Differential Gene Expression**: Cell-level identification of genes with altered expression in AD progression
+- **Pseudo-bulk Differential Gene Expression**: Donor-aggregated analysis providing increased statistical power
+- **Volcano Plots**: Visualization of significant gene expression changes for both single-cell and pseudo-bulk results
 - **UMAP Embeddings**: Spatial organization of cells by disease stage
+- **Sample Metadata**: Donor-level summaries including cell counts per Braak stage
+
+### Output Files Per Region (DLPFC/MTG):
+
+**Clustering & Composition:**
+- `*_cluster_braak_composition_counts.csv`: Cell counts per cluster and Braak stage
+- `*_cluster_braak_composition_proportions.csv`: Proportions of Braak stages within each cluster
+
+**Single-cell DEG:**
+- `*_deg_results_Reference_vs_Braak_III.csv`: Genes differentially expressed between Reference and Braak III
+- `*_deg_results_Braak_III_vs_Braak_VI.csv`: Genes differentially expressed between Braak III and Braak VI
+
+**Pseudo-bulk DEG:**
+- `*_pseudobulk_deg_results_Reference_vs_Braak_III.csv`: Pseudo-bulk DEG results with log2FC and adjusted p-values
+- `*_pseudobulk_deg_results_Braak_III_vs_Braak_VI.csv`: Pseudo-bulk DEG results with log2FC and adjusted p-values
+- `*_pseudobulk_sample_metadata.csv`: Sample-level metadata including donor IDs and cell counts
 
 ## 🛠️ Computational Environment
 
@@ -124,9 +155,34 @@ Detailed methods are available in [`Methods_Oligos_SEA-AD_Oligos.md`](Methods_Ol
 
 - Quality control parameters
 - Clustering algorithms and parameters
-- Statistical testing approaches
+- Single-cell statistical testing approaches
+- Pseudo-bulk aggregation and differential expression methodology
 - Visualization methods
 - Computational specifications
+
+### Key Methodological Notes:
+
+**Why Both Single-cell and Pseudo-bulk DEG?**
+
+The analysis includes both approaches because they complement each other:
+
+1. **Single-cell DEG** (Wilcoxon rank-sum test):
+   - Captures cell-level heterogeneity
+   - Tests differences between individual cells
+   - Can detect genes with variable expression patterns
+   - May have inflated significance due to treating cells as independent
+
+2. **Pseudo-bulk DEG** (Mann-Whitney U test on aggregated counts):
+   - Treats donors as biological replicates (proper experimental unit)
+   - Reduces technical noise through aggregation
+   - More conservative and statistically robust
+   - Better accounts for donor-to-donor variability
+   - Recommended for identifying reliable disease-associated genes
+
+**Interpretation Guidelines:**
+- Genes significant in **both** analyses are most robust and reliable
+- Genes significant only in single-cell may reflect cell-state transitions
+- Genes significant only in pseudo-bulk may have consistent directional changes masked by cellular heterogeneity in single-cell analysis
 
 ## 📄 License
 
