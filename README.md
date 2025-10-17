@@ -94,12 +94,15 @@ AD_Oligos/
 - **Method**: Wilcoxon rank-sum test on log-normalized data
 - **Level**: Cell-level analysis capturing heterogeneity
 - **Output**: Gene-level statistics with adjusted p-values
+- **Two analyses**: Standard grouping (Reference vs Braak III/VI) and pooled control (Control=Ref+B0+BII vs Braak III/VI)
 
-**Pseudo-bulk DEG:**
-- **Method**: Aggregation by donor followed by Mann-Whitney U test
-- **Normalization**: Counts per million (CPM)
-- **Advantage**: Increased statistical power by treating donors as biological replicates
-- **Output**: Gene-level statistics with robust fold change estimates
+**Pseudo-bulk DEG (DESeq2):**
+- **Method**: DESeq2 negative binomial generalized linear model
+- **Normalization**: DESeq2 median-of-ratios normalization
+- **Dispersion**: Empirical Bayes shrinkage for robust variance estimates
+- **Advantage**: Gold-standard RNA-seq analysis treating donors as biological replicates
+- **Output**: Shrunken fold changes with FDR-adjusted p-values
+- **Two analyses**: Standard grouping and pooled control (Reference+Braak0+BraakII) for increased power
 
 **Comparisons for both methods:**
 - Reference vs Braak III
@@ -122,14 +125,27 @@ The analysis generates comprehensive outputs including:
 - `*_cluster_braak_composition_counts.csv`: Cell counts per cluster and Braak stage
 - `*_cluster_braak_composition_proportions.csv`: Proportions of Braak stages within each cluster
 
-**Single-cell DEG:**
+**Single-cell DEG (Standard Grouping):**
 - `*_deg_results_Reference_vs_Braak_III.csv`: Genes differentially expressed between Reference and Braak III
 - `*_deg_results_Braak_III_vs_Braak_VI.csv`: Genes differentially expressed between Braak III and Braak VI
 
-**Pseudo-bulk DEG:**
-- `*_pseudobulk_deg_results_Reference_vs_Braak_III.csv`: Pseudo-bulk DEG results with log2FC and adjusted p-values
-- `*_pseudobulk_deg_results_Braak_III_vs_Braak_VI.csv`: Pseudo-bulk DEG results with log2FC and adjusted p-values
-- `*_pseudobulk_sample_metadata.csv`: Sample-level metadata including donor IDs and cell counts
+**Single-cell DEG (Pooled Control):**
+- `*_singlecell_pooled_Control_vs_Braak_III.csv`: Single-cell DEG (Control=Ref+B0+BII vs Braak III)
+- `*_singlecell_pooled_Control_vs_Braak_VI.csv`: Single-cell DEG (Control vs Braak VI)
+- `*_singlecell_pooled_Braak_III_vs_Braak_VI.csv`: Single-cell DEG (Braak III vs VI)
+
+**Pseudo-bulk DEG (DESeq2 - Standard Grouping):**
+- `*_deseq2_standard_Reference_vs_Braak_III.csv`: DESeq2 results (Reference: 3 donors)
+- `*_deseq2_standard_Braak_III_vs_Braak_VI.csv`: DESeq2 results (well-powered)
+
+**Pseudo-bulk DEG (DESeq2 - Pooled Control):**
+- `*_deseq2_pooled_Control_vs_Braak_III.csv`: DESeq2 results (Control=Ref+Braak0+BraakII: 9 donors)
+- `*_deseq2_pooled_Control_vs_Braak_VI.csv`: DESeq2 results (increased power)
+- `*_deseq2_pooled_Braak_III_vs_Braak_VI.csv`: DESeq2 results
+
+**Metadata & Summaries:**
+- `*_pseudobulk_sample_metadata.csv`: Sample-level metadata with donor IDs and cell counts
+- `*_deseq2_summary.csv`: Comparison of significant genes across all analyses
 
 ## 🛠️ Computational Environment
 
@@ -156,9 +172,12 @@ Detailed methods are available in [`Methods_Oligos_SEA-AD_Oligos.md`](Methods_Ol
 - Quality control parameters
 - Clustering algorithms and parameters
 - Single-cell statistical testing approaches
-- Pseudo-bulk aggregation and differential expression methodology
+- Pseudo-bulk aggregation methodology
+- DESeq2 differential expression analysis (standard and pooled groupings)
 - Visualization methods
 - Computational specifications
+
+**DESeq2 Implementation**: See [`DESeq2_IMPLEMENTATION_INSTRUCTIONS.md`](DESeq2_IMPLEMENTATION_INSTRUCTIONS.md) for detailed instructions on the pseudo-bulk analysis pipeline.
 
 ### Key Methodological Notes:
 
@@ -171,18 +190,24 @@ The analysis includes both approaches because they complement each other:
    - Tests differences between individual cells
    - Can detect genes with variable expression patterns
    - May have inflated significance due to treating cells as independent
+   - Performed with both standard and pooled groupings for comprehensive analysis
 
-2. **Pseudo-bulk DEG** (Mann-Whitney U test on aggregated counts):
+2. **Pseudo-bulk DEG** (DESeq2 on donor-aggregated counts):
    - Treats donors as biological replicates (proper experimental unit)
-   - Reduces technical noise through aggregation
-   - More conservative and statistically robust
-   - Better accounts for donor-to-donor variability
-   - Recommended for identifying reliable disease-associated genes
+   - Uses negative binomial model appropriate for count data
+   - Empirical Bayes shrinkage stabilizes fold change estimates
+   - Accounts for mean-variance relationship and dispersion
+   - Gold standard for RNA-seq differential expression
+   - Two complementary analyses:
+     * **Standard**: Preserves biological distinctions (Reference n=3, caution advised)
+     * **Pooled**: Combines early-stage groups (Reference+Braak0+BraakII) for better power (n=9)
 
 **Interpretation Guidelines:**
-- Genes significant in **both** analyses are most robust and reliable
-- Genes significant only in single-cell may reflect cell-state transitions
-- Genes significant only in pseudo-bulk may have consistent directional changes masked by cellular heterogeneity in single-cell analysis
+- **Most robust genes**: Significant in single-cell AND DESeq2 (either grouping)
+- **Standard vs Pooled DESeq2**: Standard preserves distinctions but has limited power for Reference; Pooled increases power but assumes Reference/Braak0/BraakII are similar (pre-clinical stages)
+- Genes significant only in single-cell may reflect cell-state transitions or pseudo-replication
+- Genes significant only in pseudo-bulk have consistent donor-level changes
+- **Recommended**: Focus on genes significant across multiple methods for validation
 
 ## 📄 License
 
