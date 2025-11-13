@@ -104,6 +104,12 @@ AD_Oligos/
 - **Output**: Shrunken fold changes with FDR-adjusted p-values
 - **Two analyses**: Standard grouping and pooled control (Reference+Braak0+BraakII) for increased power
 
+### Multiple Testing Correction Strategy
+
+- **Within-comparison control**: Every differential expression test (single-cell and DESeq2) reports Benjamini–Hochberg FDR-adjusted p-values (`pval_adj` / `padj`). The adjustment is applied independently for each comparison (e.g., Reference vs Braak III) across the genes tested in that contrast.
+- **Across-comparison control**: No additional correction is currently applied across the broader set of analyses (single-cell vs pseudo-bulk, standard vs pooled, MTG vs DLPFC). These comparisons are partially overlapping and exploratory, so a single global adjustment would be overly conservative and reduce power substantially.
+- **Recommended practice**: Interpret within-comparison FDR < 0.05 as evidence specific to that contrast, and prioritize genes that replicate across multiple analyses. If stricter family-wise control is required, consider applying Holm/BH procedures post hoc to the minimum adjusted p-values per gene or restricting to a predefined analysis hierarchy.
+
 **Comparisons for both methods:**
 - Reference vs Braak III
 - Braak III vs Braak VI
