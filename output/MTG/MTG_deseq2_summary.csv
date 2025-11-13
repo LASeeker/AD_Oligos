@@ -1,0 +1,7 @@
+Analysis,Comparison,N_Genes_Tested,N_Significant,N_Significant_padj005
+Standard,Reference_vs_Braak_III,16750,568,568
+Standard,Reference_vs_Braak_VI,18675,2499,2573
+Standard,Braak_III_vs_Braak_VI,18616,0,0
+Pooled,Control_vs_Braak_III,18167,1,1
+Pooled,Control_vs_Braak_VI,19204,655,793
+Pooled,Braak_III_vs_Braak_VI,18616,0,0
