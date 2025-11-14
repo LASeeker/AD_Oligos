@@ -112,6 +112,7 @@ AD_Oligos/
 
 **Comparisons for both methods:**
 - Reference vs Braak III
+- Reference vs Braak VI
 - Braak III vs Braak VI
 
 ## 📈 Key Results
@@ -133,6 +134,7 @@ The analysis generates comprehensive outputs including:
 
 **Single-cell DEG (Standard Grouping):**
 - `*_deg_results_Reference_vs_Braak_III.csv`: Genes differentially expressed between Reference and Braak III
+- `*_deg_results_Reference_vs_Braak_VI.csv`: Genes differentially expressed between Reference and Braak VI
 - `*_deg_results_Braak_III_vs_Braak_VI.csv`: Genes differentially expressed between Braak III and Braak VI
 
 **Single-cell DEG (Pooled Control):**
@@ -142,6 +144,7 @@ The analysis generates comprehensive outputs including:
 
 **Pseudo-bulk DEG (DESeq2 - Standard Grouping):**
 - `*_deseq2_standard_Reference_vs_Braak_III.csv`: DESeq2 results (Reference: 3 donors)
+- `*_deseq2_standard_Reference_vs_Braak_VI.csv`: DESeq2 results (Reference vs Braak VI)
 - `*_deseq2_standard_Braak_III_vs_Braak_VI.csv`: DESeq2 results (well-powered)
 
 **Pseudo-bulk DEG (DESeq2 - Pooled Control):**
